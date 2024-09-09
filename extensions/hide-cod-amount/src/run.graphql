@@ -1,0 +1,18 @@
+query RunInput {
+  paymentCustomization {
+    metafield(namespace: "hideCOD", key: "cartAmount") {
+      value
+    }
+  }
+  cart {
+    cost {
+      totalAmount {
+        amount
+      }
+    }
+  }
+  paymentMethods {
+    id
+    name
+  }
+}

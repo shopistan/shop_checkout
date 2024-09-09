@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "ae73f01bd0c01ae7da38a1dabb54cd28"
+name = "itpz"
+handle = "itpz"
+application_url = "https://swiss-savage-fotos-beijing.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "checkoutitp.myshopify.com"
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = ""
+
+[auth]
+redirect_urls = [
+  "https://swiss-savage-fotos-beijing.trycloudflare.com/auth/callback",
+  "https://swiss-savage-fotos-beijing.trycloudflare.com/auth/shopify/callback",
+  "https://swiss-savage-fotos-beijing.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-07"
+
+[pos]
+embedded = false
