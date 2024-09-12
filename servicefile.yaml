@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: SERVICE_NAME-deployment
+  namespace: NAME_SPACE
+  labels:
+    app: SERVICE_NAME
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: SERVICE_NAME
+  template:
+    metadata:
+      labels:
+        app: SERVICE_NAME
+    spec:
+      containers:
+      - name: SERVICE_NAME
+        image: AWS_ACCOUNT_ID.dkr.ecr.AWS_DEFAULT_REGION.amazonaws.com/IMAGE_REPO:IMAGE_TAG
+        imagePullPolicy: Always
+        ports:
+        - containerPort: SERVICE_PORT
+          protocol: TCP 
+        # env:
+        # - name: API_SECRET_KEY
+        #   value: _API_SECRET_KEY
+        -  
+
+      nodeSelector:
+        nodegroup-name: NODE_NAME        
+---
+ apiVersion: v1
+ kind: Service
+ metadata:
+   name: SERVICE_NAME
+   namespace: NAME_SPACE
+ spec:
+   selector:
+     app: SERVICE_NAME
+   ports:
+      - port: 80
+        targetPort: SERVICE_PORT
+        protocol: TCP
+  #  type: LoadBalancer
+
+
+  

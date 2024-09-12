@@ -1,0 +1,40 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
+      - echo $IMAGE_TAG
+      - echo Build started on `date`
+      - echo Building the Docker image.....
+      - echo "image" $IMAGE_REPO
+      - export SERVICE_TYPE=$SERVICE_TYPE
+      - export SERVICE_NAME=$SERVICE_NAME
+      - export NAME_SPACE=$NAME_SPACE
+      - export SERVICE_PORT=$SERVICE_PORT
+      - export BRANCH_NAME=$BRANCH_NAME
+      - export CLUSTER=$CLUSTER_NAME
+      - docker build -t $IMAGE_REPO:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG
+      - CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::359127362485:role/oe-els --role-session-name oe-els --duration-seconds 900)
+      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+      - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+      - echo $AWS_ACCESS_KEY_ID
+      - echo $AWS_SECRET_ACCESS_KEY
+      - echo $AWS_SESSION_TOKEN
+      - aws sts get-caller-identity
+      - sed -i "s/IMAGE_REPO/${IMAGE_REPO}/g; s/AWS_DEFAULT_REGION/${AWS_DEFAULT_REGION}/g; s/AWS_ACCOUNT_ID/${AWS_ACCOUNT_ID}/g; s/IMAGE_TAG/${IMAGE_TAG}/g; s/NAME_SPACE/${NAME_SPACE}/g; s/SERVICE_NAME/${SERVICE_NAME}/g; s/SERVICE_PORT/${SERVICE_PORT}/g; s/REPLICAS/${REPLICAS}/g;s%NODE_NAME%${NODE_NAME}%g;" "servicefile.yaml"
+      # - sed -i "s/_API_SECRET_KEY/${API_SECRET_KEY}/g;" "servicefile.yaml"
+      - cat servicefile.yaml
+      - aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $CLUSTER_NAME
+      - kubectl apply -f servicefile.yaml
