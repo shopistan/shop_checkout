@@ -22,7 +22,6 @@ spec:
         ports:
         - containerPort: SERVICE_PORT  # Make sure this is a valid port number
           protocol: TCP
-        # Uncomment and provide environment variables as needed
         env:
         - name: SHOPIFY_API_KEY
           value: _SHOPIFY_API_KEY
