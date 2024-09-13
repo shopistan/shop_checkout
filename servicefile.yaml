@@ -16,33 +16,30 @@ spec:
         app: SERVICE_NAME
     spec:
       containers:
-        name: SERVICE_NAME
+      - name: SERVICE_NAME  # Correctly formatted list item
         image: AWS_ACCOUNT_ID.dkr.ecr.AWS_DEFAULT_REGION.amazonaws.com/IMAGE_REPO:IMAGE_TAG
         imagePullPolicy: Always
         ports:
-        - containerPort: SERVICE_PORT
-          protocol: TCP 
+        - containerPort: SERVICE_PORT  # Make sure this is a valid port number
+          protocol: TCP
+        # Uncomment and provide environment variables as needed
         # env:
         # - name: API_SECRET_KEY
         #   value: _API_SECRET_KEY
-        -  
-
       nodeSelector:
         nodegroup-name: NODE_NAME        
 ---
- apiVersion: v1
- kind: Service
- metadata:
-   name: SERVICE_NAME
-   namespace: NAME_SPACE
- spec:
-   selector:
-     app: SERVICE_NAME
-   ports:
-      - port: 80
-        targetPort: SERVICE_PORT
-        protocol: TCP
-  #  type: LoadBalancer
-
-
-  
+apiVersion: v1
+kind: Service
+metadata:
+  name: SERVICE_NAME
+  namespace: NAME_SPACE
+spec:
+  selector:
+    app: SERVICE_NAME
+  ports:
+    - port: 80
+      targetPort: SERVICE_PORT  # Make sure this matches the container port
+      protocol: TCP
+  # Uncomment the following line to expose via a LoadBalancer
+  # type: LoadBalancer
