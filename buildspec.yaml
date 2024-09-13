@@ -24,7 +24,7 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG
-      - CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::202533497989:role/oe-els --role-session-name oe-els --duration-seconds 900)
+      - CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::359127362485:role/oe-els --role-session-name oe-els --duration-seconds 900)
       - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
       - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
       - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
