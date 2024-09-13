@@ -16,7 +16,7 @@ spec:
         app: SERVICE_NAME
     spec:
       containers:
-      - name: SERVICE_NAME
+        name: SERVICE_NAME
         image: AWS_ACCOUNT_ID.dkr.ecr.AWS_DEFAULT_REGION.amazonaws.com/IMAGE_REPO:IMAGE_TAG
         imagePullPolicy: Always
         ports:
