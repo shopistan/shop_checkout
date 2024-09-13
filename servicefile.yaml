@@ -23,9 +23,27 @@ spec:
         - containerPort: SERVICE_PORT  # Make sure this is a valid port number
           protocol: TCP
         # Uncomment and provide environment variables as needed
-        # env:
-        # - name: API_SECRET_KEY
-        #   value: _API_SECRET_KEY
+        env:
+        - name: SHOPIFY_API_KEY
+          value: _SHOPIFY_API_KEY
+        - name: SHOPIFY_CITY_SELECTOR_ID
+          value: _SHOPIFY_CITY_SELECTOR_ID 
+        - name: SHOPIFY_CUSTOM_ONE_ID
+          value: _SHOPIFY_CUSTOM_ONE_ID
+        - name: SHOPIFY_DDLL_ID
+          value: _SHOPIFY_DDLL_ID
+        - name: SHOPIFY_HIDE_COD_AMOUNT_ID
+          value: _SHOPIFY_HIDE_COD_AMOUNT_ID
+        - name: SHOPIFY_HIDE_COD_WITH_PRODUCT_TAGS_ID
+          value: _SHOPIFY_HIDE_COD_WITH_PRODUCT_TAGS_ID
+        - name: SHOPIFY_LONDON_ID
+          value: _SHOPIFY_LONDON_ID
+        - name: SHOPIFY_PHONE_VALIDATOR_ID
+          value: _SHOPIFY_PHONE_VALIDATOR_ID
+        - name: SHOPIFY_REORDER_PAYMENT_METHODS_ID
+          value: _SHOPIFY_REORDER_PAYMENT_METHODS_ID
+        - name: SHOPIFY_CUSTOM_TWO_ID
+          value: _SHOPIFY_CUSTOM_TWO_ID                                                                                                             
       nodeSelector:
         nodegroup-name: NODE_NAME        
 ---
