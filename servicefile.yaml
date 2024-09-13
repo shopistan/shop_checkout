@@ -42,7 +42,9 @@ spec:
         - name: SHOPIFY_REORDER_PAYMENT_METHODS_ID
           value: _SHOPIFY_REORDER_PAYMENT_METHODS_ID
         - name: SHOPIFY_CUSTOM_TWO_ID
-          value: _SHOPIFY_CUSTOM_TWO_ID                                                                                                             
+          value: _SHOPIFY_CUSTOM_TWO_ID   
+        - name: SHOPIFY_APP_URL
+          value: _SHOPIFY_APP_URL                                                                                                                
       nodeSelector:
         nodegroup-name: NODE_NAME        
 ---
