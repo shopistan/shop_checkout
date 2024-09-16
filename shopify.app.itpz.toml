@@ -1,8 +1,8 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "ae73f01bd0c01ae7da38a1dabb54cd28"
-name = "itpz"
-handle = "itpz"
+client_id = "3ec471a28fb9b2749c753c0e429953d6"
+name = "easycheckout"
+handle = "easycheckout"
 application_url = "https://swiss-savage-fotos-beijing.trycloudflare.com"
 embedded = true
 
