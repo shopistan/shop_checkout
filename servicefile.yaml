@@ -44,7 +44,9 @@ spec:
         - name: SHOPIFY_CUSTOM_TWO_ID
           value: _SHOPIFY_CUSTOM_TWO_ID   
         - name: SHOPIFY_APP_URL
-          value: _SHOPIFY_APP_URL                                                                                                                
+          value: _SHOPIFY_APP_URL 
+        - name: APP_URL
+          value: _APP_URL                                                                                                               
       nodeSelector:
         nodegroup-name: NODE_NAME        
 ---
