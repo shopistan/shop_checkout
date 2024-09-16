@@ -7,21 +7,13 @@ COPY . .
 
 ENV NODE_ENV=production
 
-# Install dependencies excluding dev dependencies
 RUN npm install --omit=dev
-
-# Update Prisma to the latest version
-RUN npm i --save-dev prisma@latest
-RUN npm i @prisma/client@latest
-
-# Remove CLI packages since they are not needed in production
+# Remove CLI packages since we don't need them in production by default.
+# Remove this line if you want to run CLI commands in your container.
 RUN npm remove @shopify/app @shopify/cli
-
-# Build the application
 RUN npm run build
 
-# Remove the development SQLite file
+# You'll probably want to remove this in production, it's here to make it easier to test things!
 RUN rm -f prisma/dev.sqlite
 
-# Start the application
 CMD ["npm", "run", "docker-start"]
