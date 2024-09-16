@@ -46,7 +46,7 @@ spec:
         - name: SHOPIFY_APP_URL
           value: _SHOPIFY_APP_URL 
         - name: APP_URL
-          value: _APP_URL                                                                                                               
+          value: _APP_UURRL                                                                                                               
       nodeSelector:
         nodegroup-name: NODE_NAME        
 ---
