@@ -1,6 +1,6 @@
-# FROM node:18-alpine
+FROM node-18.20-alpine
 # FROM 359127362485.dkr.ecr.us-east-2.amazonaws.com/node-18-alpine
-FROM 359127362485.dkr.ecr.us-east-2.amazonaws.com/node-18.20-alpine
+# FROM 359127362485.dkr.ecr.us-east-2.amazonaws.com/node-18.20-alpine
 
 EXPOSE 3000
 
