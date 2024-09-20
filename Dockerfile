@@ -1,22 +1,30 @@
-FROM node-18.20-alpine
-# FROM 359127362485.dkr.ecr.us-east-2.amazonaws.com/node-18-alpine
-# FROM 359127362485.dkr.ecr.us-east-2.amazonaws.com/node-18.20-alpine
+# Pull the official Node.js 18.20-alpine image from Docker Hub
+FROM node:18.20-alpine
 
+# Expose port 3000
 EXPOSE 3000
 
+# Set working directory to /app inside the container
 WORKDIR /app
+
+# Copy everything from the current directory to /app in the container
 COPY . .
 
+# Set environment to production
 ENV NODE_ENV=production
 
+# Install npm and project dependencies, omitting dev dependencies
 RUN npm install -g npm@10.2.3
 RUN npm install --omit=dev
-# Remove CLI packages since we don't need them in production by default.
-# Remove this line if you want to run CLI commands in your container.
+
+# Optional: Remove unnecessary CLI packages for production
 RUN npm remove @shopify/app @shopify/cli
+
+# Build the app
 RUN npm run build
 
-# You'll probably want to remove this in production, it's here to make it easier to test things!
+# Optional: Clean up dev files if not needed in production
 RUN rm -f prisma/dev.sqlite
 
+# Command to start the app
 CMD ["npm", "run", "docker-start"]
