@@ -7,35 +7,19 @@ phases:
   build:
     commands:
       - IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
-      - echo $IMAGE_TAG
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME
       - echo Build started on `date`
-      - echo Building the Docker image.....
-      - echo "image" $IMAGE_REPO
-      - export SERVICE_TYPE=$SERVICE_TYPE
-      - export SERVICE_NAME=$SERVICE_NAME
-      - export NAME_SPACE=$NAME_SPACE
-      - export SERVICE_PORT=$SERVICE_PORT
-      - export BRANCH_NAME=$BRANCH_NAME
-      - export CLUSTER=$CLUSTER_NAME
-      - docker build -t $IMAGE_REPO:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG -f Dockerfile .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:
     commands:
+      - IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG
-      - CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::359127362485:role/oe-els --role-session-name oe-els --duration-seconds 900)
-      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
-      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
-      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
-      - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
-      - echo $AWS_ACCESS_KEY_ID
-      - echo $AWS_SECRET_ACCESS_KEY
-      - echo $AWS_SESSION_TOKEN
-      - aws sts get-caller-identity
-      - sed -i "s/IMAGE_REPO/${IMAGE_REPO}/g; s/AWS_DEFAULT_REGION/${AWS_DEFAULT_REGION}/g; s/AWS_ACCOUNT_ID/${AWS_ACCOUNT_ID}/g; s/IMAGE_TAG/${IMAGE_TAG}/g; s/NAME_SPACE/${NAME_SPACE}/g; s/SERVICE_NAME/${SERVICE_NAME}/g; s/SERVICE_PORT/${SERVICE_PORT}/g; s/REPLICAS/${REPLICAS}/g;s%NODE_NAME%${NODE_NAME}%g;" "servicefile.yaml"
-      - sed -i "s|_SHOPIFY_API_KEY|${SHOPIFY_API_KEY}|g; s|_SHOPIFY_CITY_SELECTOR_ID|${SHOPIFY_CITY_SELECTOR_ID}|g; s|_SHOPIFY_CUSTOM_ONE_ID|${SHOPIFY_CUSTOM_ONE_ID}|g; s|_SHOPIFY_DDLL_ID|${SHOPIFY_DDLL_ID}|g; s|_SHOPIFY_HIDE_COD_AMOUNT_ID|${SHOPIFY_HIDE_COD_AMOUNT_ID}|g; s|_SHOPIFY_HIDE_COD_WITH_PRODUCT_TAGS_ID|${SHOPIFY_HIDE_COD_WITH_PRODUCT_TAGS_ID}|g; s|_SHOPIFY_LONDON_ID|${SHOPIFY_LONDON_ID}|g; s|_SHOPIFY_PHONE_VALIDATOR_ID|${SHOPIFY_PHONE_VALIDATOR_ID}|g; s|_SHOPIFY_REORDER_PAYMENT_METHODS_ID|${SHOPIFY_REORDER_PAYMENT_METHODS_ID}|g; s|_SHOPIFY_CUSTOM_TWO_ID|${SHOPIFY_CUSTOM_TWO_ID}|g; s|_SHOPIFY_APP_URL|${SHOPIFY_APP_URL}|g; s|_APP_UURRL|${APP_URL}|g" "servicefile.yaml"
-      - sed -i "s|_SHOPIFY_API_SECRET|${SHOPIFY_API_SECRET}|g;" "servicefile.yaml"     
-      - cat servicefile.yaml
-      - aws eks update-kubeconfig --region $AWS_DEFAULT_REGION --name $CLUSTER_NAME
-      - kubectl apply -f servicefile.yaml
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - echo deploy started
+      - ls
+      - printf '[{"name":"%s","imageUri":"%s"}]' $CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+artifacts:
+    files: imagedefinitions.json
