@@ -1,5 +1,6 @@
 # FROM node:18-alpine
-FROM 359127362485.dkr.ecr.us-east-2.amazonaws.com/node-18-alpine
+# FROM 359127362485.dkr.ecr.us-east-2.amazonaws.com/node-18-alpine
+FROM 359127362485.dkr.ecr.us-east-2.amazonaws.com/node-18.20-alpine
 
 EXPOSE 3000
 
@@ -8,6 +9,7 @@ COPY . .
 
 ENV NODE_ENV=production
 
+RUN npm install -g npm@10.2.3
 RUN npm install --omit=dev
 # Remove CLI packages since we don't need them in production by default.
 # Remove this line if you want to run CLI commands in your container.
